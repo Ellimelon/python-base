@@ -13,11 +13,39 @@ dependencies = [
 [tool.poetry]
 packages = [{include = "python_base", from = "src"}]
 
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "UP",
+    "N",
+    "D",
+    "ANN",
+    "TCH",
+]
+ignore = [
+    "ANN101",  # Don't require type annotation for self.
+    "ANN102",  # Don't require type annotation for cls.
+    "D203",
+    "D212",
+]
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [dependency-groups]
 dev = [
-    "pytest (>=9.0.2,<10.0.0)"
+    "pytest (>=9.0.2,<10.0.0)",
+    "ruff (>=0.14.14,<0.15.0)",
 ]
