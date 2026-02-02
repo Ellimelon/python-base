@@ -13,3 +13,7 @@
 2. Select Configure Python Tests.
 3. Select pytest.
 4. Select tests.
+
+# Setup
+## Pre-commit
+1. Run `poetry run pre-commit install`
