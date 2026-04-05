@@ -11,6 +11,7 @@
     - [Run Commands in the Container](#run-commands-in-the-container)
     - [Stop the Workspace Container](#stop-the-workspace-container)
     - [When to Rebuild](#when-to-rebuild)
+- [GitHub CI](#github-ci)
 - [Forking](#forking)
 
 # Local Developer Setup
@@ -175,6 +176,15 @@ A rebuild can be triggered with:
 ```bash
 docker compose up -d --build
 ```
+
+# GitHub CI
+
+GitHub Actions runs two separate checks for this repository:
+
+- `lint` for `ruff` and `mypy`
+- `test` for `pytest`
+
+The workflow runs on pull requests and on pushes to `main`.
 
 # Forking
 
