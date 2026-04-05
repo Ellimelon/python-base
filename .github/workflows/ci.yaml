@@ -28,14 +28,67 @@ jobs:
       - name: Sync development dependencies
         run: uv sync --extra dev
 
-      - name: Run Ruff lint checks
-        run: uv run ruff check .
+      - name: Run linting, formatting, and type checks in parallel (grouped output)
+        shell: bash {0}
+        run: |
+          # Disable automatic exit on error
+          set +e
 
-      - name: Check Ruff formatting
-        run: uv run ruff format --check .
+          # Run each tool in the background, capturing output
+          (timeout 60 uv run ruff check . > ruff_lint.log 2>&1) &
+          PID_RUFF_LINT=$!
 
-      - name: Run mypy
-        run: uv run mypy
+          (timeout 60 uv run ruff format --check . > ruff_format.log 2>&1) &
+          PID_RUFF_FORMAT=$!
+
+          (timeout 60 uv run mypy > mypy.log 2>&1) &
+          PID_MYPY=$!
+
+          # Wait for all to finish and capture exit codes
+          wait $PID_RUFF_LINT
+          STATUS_RUFF_LINT=$?
+
+          wait $PID_RUFF_FORMAT
+          STATUS_RUFF_FORMAT=$?
+
+          wait $PID_MYPY
+          STATUS_MYPY=$?
+
+          # Determine icons
+          ICON_RUFF_LINT=$([ $STATUS_RUFF_LINT -eq 0 ] && echo "✅" || echo "❌")
+          ICON_RUFF_FORMAT=$([ $STATUS_RUFF_FORMAT -eq 0 ] && echo "✅" || echo "❌")
+          ICON_MYPY=$([ $STATUS_MYPY -eq 0 ] && echo "✅" || echo "❌")
+
+          echo "::group::Ruff Lint Output ${ICON_RUFF_LINT}"
+          if [ $STATUS_RUFF_LINT -eq 124 ]; then
+            echo "⏳ Ruff lint timed out after 60 seconds."
+          fi
+          cat ruff_lint.log || true
+          echo "::endgroup::"
+
+          echo "::group::Ruff Format Output ${ICON_RUFF_FORMAT}"
+          if [ $STATUS_RUFF_FORMAT -eq 124 ]; then
+            echo "⏳ Ruff lint timed out after 60 seconds."
+          fi
+          cat ruff_format.log || true
+          echo "::endgroup::"
+
+          echo "::group::Mypy Output ${ICON_MYPY}"
+          if [ $STATUS_MYPY -eq 124 ]; then
+            echo "⏳ Ruff lint timed out after 60 seconds."
+          fi
+          cat mypy.log || true
+          echo "::endgroup::"
+
+          # Fail the job if any failed
+          if [ $STATUS_RUFF_LINT -ne 0 ] || \
+             [ $STATUS_RUFF_FORMAT -ne 0 ] || \
+             [ $STATUS_MYPY -ne 0 ]; then
+            echo "❌ One or more checks failed."
+            exit 1
+          fi
+
+          echo "✅ All checks passed."
 
   test:
     name: Test
