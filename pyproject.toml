@@ -58,8 +58,6 @@ select = [
     "TCH",
 ]
 ignore = [
-    "ANN101",  # Don't require type annotation for self.
-    "ANN102",  # Don't require type annotation for cls.
     "D203",
     "D212",
 ]
