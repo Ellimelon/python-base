@@ -1,53 +1,47 @@
+# Contents
+- [Local Developer Setup](#local-developer-setup)
+  - [Local Host Workflows](#local-host-workflow)
+    - [UV Installation](#uv-installation)
+    - [Local Python Environment](#local-python-environment)
+    - [Pre-commit](#pre-commit)
+    - [IDEs](#ides)
+      - [VSCode](#vscode)
+  - [Container Workflow](#container-workflow)
+    - [Start the Workspace Container](#start-the-workspace-container)
+    - [Run Commands in the Container](#run-commands-in-the-container)
+    - [Stop the Workspace Container](#stop-the-workspace-container)
+    - [When to Rebuild](#when-to-rebuild)
+- [Forking](#forking)
+
 # Local Developer Setup
 
 This repository supports two development workflows:
 
-1. Local host development with `uv` and a local `.venv`.
+- [Local Host Workflow](#local-host-workflow), with `uv` and a local `.venv`.
    Use this for IDE integration, local testing, linting, type-checking, and debugging.
-2. Containerized development with `docker compose`
+- [Container Workflow](#container-workflow) with `docker compose`.
    Use this for running the application in a containerized environment and for container-native commands.
 
-The local `.venv` remains the recommended interpreter for IDEs. The `dev` container is a workspace container and is not intended to replace your IDE interpreter.
-
-## Contents
-- [Development Workflows](#development-workflows)
-- [UV Installation](#uv-installation)
-- [Local Python Environment](#local-python-environment)
-- [IDEs](#ides)
-- [Container Workflow](#container-workflow)
-- [When to Rebuild](#when-to-rebuild)
-- [Pre-commit](#pre-commit)
-
-## Development Workflows
-
-### Local Host Workflow
+## Local Host Workflow
 Use the local host workflow when you want to:
 - run tests from your IDE
 - use local linting and type-checking
 - debug Python code locally
 - use `pre-commit`
 
-### Container Workflow
-Use the container workflow when you want to:
-- run the application in a containerized environment
-- execute commands inside the workspace container
-- work against the same container setup defined by `Dockerfile` and `docker-compose.yaml`
+### UV Installation
 
-The `dev` container installs the project in editable mode, so source changes in the bind-mounted repository are visible immediately inside the container without rebuilding the image.
-
-## UV Installation
-
-### Ubuntu
+#### Ubuntu
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-## Local Python Environment
+### Local Python Environment
 
-### Prerequisites
+#### Prerequisites
 - [UV Installation](#uv-installation)
 
-### Recommended Setup
+#### Setup
 For normal contributor setup, install the local development environment with:
 
 ```bash
@@ -56,21 +50,43 @@ uv sync --extra dev
 
 This creates `.venv` and installs the development tools used by this repository.
 
-### Optional Runtime-only Setup
+#### Optional: Runtime-only Setup
 If you only need the runtime dependency set locally, you can use:
 
 ```bash
 uv sync
 ```
 
-## IDEs
 
-### Prerequisites
+### Pre-commit
+
+#### Prerequisites
 - [Local Python Environment](#local-python-environment)
 
-### VSCode
+#### Setup
+Install pre-commit hooks from the local host environment with:
 
-#### Interpreter
+```bash
+uv run pre-commit install
+```
+
+Once installed, the Git commit hooks run automatically during `git commit`.
+
+#### Manual Validation
+To validate existing files, run:
+
+```bash
+uv run pre-commit run --all-files
+```
+
+### IDEs
+
+#### Prerequisites
+- [Local Python Environment](#local-python-environment)
+
+#### VSCode
+
+##### Interpreter
 Use the local `.venv` interpreter for IDE-based testing and debugging.
 
 POSIX path:
@@ -83,14 +99,14 @@ Windows path:
 .\.venv\Scripts\python.exe
 ```
 
-##### Steps
+###### Steps
 1. Press `ctrl` + `shift` + `p`.
 2. Run `Python: Select Interpreter`.
 3. Select the interpreter from `.venv`.
 
-#### Testing
+##### Testing
 
-##### Steps
+###### Steps
 1. Select the "Testing" tab.
 2. Select "Configure Python Tests".
 3. Select `pytest`.
@@ -103,6 +119,12 @@ uv run pytest
 ```
 
 ## Container Workflow
+Use the container workflow when you want to:
+- run the application in a containerized environment
+- execute commands inside the workspace container
+- work against the same container setup defined by `Dockerfile` and `docker-compose.yaml`
+
+The `dev` container installs the project in editable mode, so source changes in the bind-mounted repository are visible immediately inside the container without rebuilding the image.
 
 ### Start the Workspace Container
 Build and start the workspace container with:
@@ -132,9 +154,9 @@ docker compose exec dev bash
 docker compose down
 ```
 
-## When to Rebuild
+### When to Rebuild
 
-### Rebuild Not Required
+#### Rebuild Not Required
 You do not usually need to rebuild Docker images when:
 - you change application source code under `src/`
 - you change tests
@@ -142,7 +164,7 @@ You do not usually need to rebuild Docker images when:
 
 This is because the repository is bind-mounted into `/app` in the `dev` service.
 
-### Rebuild Required
+#### Rebuild Required
 You should rebuild the container environment when you change:
 - `pyproject.toml`
 - `uv.lock`
@@ -157,21 +179,12 @@ A rebuild can be triggered with:
 docker compose up -d --build
 ```
 
-## Pre-commit
+# Forking
 
-### Prerequisites
-- [Local Python Environment](#local-python-environment)
+After you fork or copy this repository, update the project identity before you build on it further.
 
-### Setup
-Install pre-commit hooks from the local host environment with:
-
-```bash
-uv run pre-commit install
-```
-
-### Manual Validation
-To validate existing files, run:
-
-```bash
-uv run pre-commit run --all-files
-```
+## Rename Checklist
+- Update the project name and metadata in `pyproject.toml`.
+- Rename the package directory `src/python_base` to match the new import path.
+- Update the Compose project name in `docker-compose.yaml` if you do not want to keep `python-base`.
+- Update commands in `Dockerfile`.
