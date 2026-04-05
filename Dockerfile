@@ -50,3 +50,22 @@ COPY --from=dependency-wheels /wheels /wheels
 RUN if grep -Eq '^[[:space:]]*[^#[:space:]]' /app/requirements-runtime.txt; then \
         uv pip install --system --no-index --find-links /wheels -r /app/requirements-runtime.txt; \
     fi
+
+# ===
+# dev
+# ===
+FROM mounted-runtime AS dev
+
+# Copy project metadata and source for editable installation.
+COPY pyproject.toml uv.lock ./
+COPY README.md ./
+COPY src/ ./src/
+
+# Install development dependencies into the container environment and register the project as editable.
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv export --frozen --extra dev --no-emit-project --output-file /app/requirements-dev.txt \
+    && uv pip install --system -r /app/requirements-dev.txt \
+    && uv pip install --system --editable /app
+
+# Default command for a long-running local development workspace.
+CMD ["sleep", "infinity"]
