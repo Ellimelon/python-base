@@ -6,7 +6,11 @@ services:
       context: .
       target: dev
     volumes:
-      - .:/app
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./pyproject.toml:/app/pyproject.toml
+      - ./uv.lock:/app/uv.lock
+      - ./README.md:/app/README.md
       - uv-cache:/root/.cache/uv
     environment:
       PYTHONUNBUFFERED: "1"

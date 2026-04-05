@@ -124,7 +124,7 @@ Use the container workflow when you want to:
 - execute commands inside the workspace container
 - work against the same container setup defined by `Dockerfile` and `docker-compose.yaml`
 
-The `dev` container installs the project in editable mode, so source changes in the bind-mounted repository are visible immediately inside the container without rebuilding the image.
+The `dev` container installs the project in editable mode. The container bind-mounts only the files it needs for active development, including `src/`, `tests/`, `pyproject.toml`, `uv.lock`, and `README.md`.
 
 ### Start the Workspace Container
 Build and start the workspace container with:
@@ -160,9 +160,6 @@ docker compose down
 You do not usually need to rebuild Docker images when:
 - you change application source code under `src/`
 - you change tests
-- you change other bind-mounted project files that are only used at runtime inside the workspace container
-
-This is because the repository is bind-mounted into `/app` in the `dev` service.
 
 #### Rebuild Required
 You should rebuild the container environment when you change:
