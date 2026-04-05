@@ -145,7 +145,7 @@ Examples:
 ```bash
 docker compose exec dev pytest
 docker compose exec dev ruff check .
-docker compose exec dev mypy src
+docker compose exec dev mypy
 docker compose exec dev bash
 ```
 
