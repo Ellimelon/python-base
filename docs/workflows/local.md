@@ -10,6 +10,7 @@ Use the local host workflow when you want to:
 - [Python Environment](#python-environment)
 - [Pre-commit](#pre-commit)
 - IDEs
+  - [PyCharm](ides/pycharm.md)
   - [VS Code](ides/vscode.md)
 
 ## UV Installation

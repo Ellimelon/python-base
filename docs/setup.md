@@ -12,5 +12,6 @@ This repository supports two development workflows:
   - [Python Environment](workflows/local.md#python-environment)
   - [Pre-commit](workflows/local.md#pre-commit)
   - IDEs
+    - [PyCharm](workflows/ides/pycharm.md) 
     - [VS Code](workflows/ides/vscode.md)
 - [Container Workflow](workflows/container.md)
