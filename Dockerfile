@@ -26,7 +26,7 @@ COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=cache,target=/root/.cache/pip \
     mkdir -p /wheels \
-    && uv export --frozen --no-dev --no-emit-project --output-file /app/requirements-runtime.txt \
+    && uv export --locked --no-dev --no-emit-project --output-file /app/requirements-runtime.txt \
     && if grep -Eq '^[[:space:]]*[^#[:space:]]' /app/requirements-runtime.txt; then \
         python3 -m pip wheel \
           --disable-pip-version-check \
@@ -60,7 +60,7 @@ COPY src/ ./src/
 
 # Install development dependencies into the container environment and register the project as editable.
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv export --frozen --extra dev --no-emit-project --output-file /app/requirements-dev.txt \
+    uv export --locked --extra dev --no-emit-project --output-file /app/requirements-dev.txt \
     && uv pip install --system -r /app/requirements-dev.txt \
     && uv pip install --system --editable /app
 
