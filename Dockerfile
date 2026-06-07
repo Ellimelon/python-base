@@ -19,9 +19,6 @@ COPY --from=uv-bin /uv /uvx /bin/
 # =================
 FROM base AS dependency-wheels
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates build-essential python3-pip && rm -rf /var/lib/apt/lists/*
-
 # Copy pyproject.toml & uv.lock
 COPY pyproject.toml uv.lock ./
 
