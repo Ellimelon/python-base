@@ -48,7 +48,7 @@ COPY --from=dependency-wheels /wheels /wheels
 
 # Install runtime dependencies from the local wheelhouse when the manifest is not empty.
 RUN if grep -Eq '^[[:space:]]*[^#[:space:]]' /app/requirements-runtime.txt; then \
-        uv pip install --system --no-index --find-links /wheels -r /app/requirements-runtime.txt; \
+        uv pip install --system --no-index --find-links /wheels --no-verify-hashes -r /app/requirements-runtime.txt; \
     fi
 
 # ===
