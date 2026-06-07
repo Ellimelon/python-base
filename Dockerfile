@@ -62,7 +62,7 @@ COPY src/ ./src/
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv export --locked --extra dev --no-emit-project --output-file /app/requirements-dev.txt \
     && uv pip install --system -r /app/requirements-dev.txt \
-    && uv pip install --system --editable /app
+    && uv pip install --system --no-deps --editable /app
 
 # Default command for a long-running local development workspace.
 CMD ["sleep", "infinity"]
