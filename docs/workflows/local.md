@@ -27,16 +27,16 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 For normal contributor setup, install the local development environment with:
 
 ```bash
-uv sync --extra dev
+uv sync
 ```
 
-This creates `.venv` and installs the development tools used by this repository.
+This creates `.venv` and installs the project and the default `dev` dependency group used by this repository.
 
 ### Optional: Runtime-only Setup
 If you only need the runtime dependency set locally, you can use:
 
 ```bash
-uv sync
+uv sync --no-dev
 ```
 
 ## Pre-commit

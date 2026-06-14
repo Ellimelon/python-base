@@ -26,7 +26,7 @@ jobs:
           enable-cache: true
 
       - name: Sync development dependencies
-        run: uv sync --extra dev --locked
+        run: uv sync --locked
 
       - name: Run linting, formatting, and type checks in parallel (grouped output)
         shell: bash {0}
@@ -109,7 +109,7 @@ jobs:
           enable-cache: true
 
       - name: Sync development dependencies
-        run: uv sync --extra dev --locked
+        run: uv sync --locked
 
       - name: Run pytest
         run: uv run pytest

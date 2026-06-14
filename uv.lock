@@ -263,7 +263,7 @@ name = "python-base"
 version = "0.1.0"
 source = { editable = "." }
 
-[package.optional-dependencies]
+[package.dev-dependencies]
 dev = [
     { name = "mypy" },
     { name = "pre-commit" },
@@ -272,13 +272,14 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.19.1,<2.0.0" },
-    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.5.1,<5.0.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.0.2,<10.0.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.14.14,<1.0.0" },
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.19.1,<2.0.0" },
+    { name = "pre-commit", specifier = ">=4.5.1,<5.0.0" },
+    { name = "pytest", specifier = ">=9.0.2,<10.0.0" },
+    { name = "ruff", specifier = ">=0.14.14,<1.0.0" },
 ]
-provides-extras = ["dev"]
 
 [[package]]
 name = "python-discovery"

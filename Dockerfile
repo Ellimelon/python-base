@@ -58,9 +58,9 @@ COPY pyproject.toml uv.lock ./
 COPY README.md ./
 COPY src/ ./src/
 
-# Install development dependencies into the container environment and register the project as editable.
+# Install only development-group dependencies, then register the project as editable.
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv export --locked --extra dev --no-emit-project --output-file /app/requirements-dev.txt \
+    uv export --locked --only-group dev --output-file /app/requirements-dev.txt \
     && uv pip install --system -r /app/requirements-dev.txt \
     && uv pip install --system --no-deps --editable /app
 

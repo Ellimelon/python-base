@@ -4,7 +4,7 @@ Use the container workflow when you want to:
 - execute commands inside the workspace container
 - work against the same container setup defined by `Dockerfile` and `docker-compose.yaml`
 
-The `dev` container installs the project in editable mode. The container bind-mounts only the files it needs for active development, including `src/`, `tests/`, `pyproject.toml`, `uv.lock`, and `README.md`.
+The `dev` container inherits runtime dependencies from the `mounted-runtime` image, adds only the `dev` dependency group, and installs the project in editable mode. The container bind-mounts only the files it needs for active development, including `src/`, `tests/`, `pyproject.toml`, `uv.lock`, and `README.md`.
 
 ## Contents
 - [Start the Workspace Container](#start-the-workspace-container)
